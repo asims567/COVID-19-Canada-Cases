@@ -172,3 +172,54 @@ ggplot(df_cfr, aes(x = week, y = CFR)) +
   theme_minimal()
 
 
+cor_data <- cor_data[complete.cases(cor_data), ]
+
+if (nrow(cor_data) > 0) {
+  print("--- Correlation Result ---")
+  print(cor.test(cor_data$cases, cor_data$deaths))
+
+
+Pearson's product-moment
+	correlation
+
+data:  cor_data$cases and cor_data$deaths
+t = 312.83, df = 3373,
+p-value < 2.2e-16
+Alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.9820374 0.9842881
+sample estimates:
+   cor 
+0.9832 
+
+
+on_qc <- subset(data, prname %in% c("Ontario", "Quebec")) 
+on_qc_clean <- on_qc[!is.na(on_qc$numdeaths_last7), ]
+on_qc_clean$prname <- factor(on_qc_clean$prname)
+
+
+print("--- T-Test: Ontario vs Quebec ---")
+t.test(numdeaths_last7 ~ prname, data = on_qc_clean)
+
+Welch Two-Sample t-test
+
+data:  numdeaths_last7 by prname
+t = -0.69284, df = 450.06,
+p-value = 0.4888
+Alternative hypothesis: the true difference in means between group Ontario and group Quebec is not equal to 0
+95 percent confidence interval:
+ -26.63376  12.74946
+sample estimates:
+mean in the group Ontario 
+             77.98760 
+ mean in the group Quebec 
+             84.92975
+
+boxplot(numdeaths_last7 ~ prname, 
+        data = on_qc_clean,
+        main = "Weekly Deaths: Ontario vs Quebec", 
+        col = c("blue", "red"), 
+        ylab = "Deaths (Last 7 Days)", 
+        xlab = "Province", 
+        names = c("Ontario", "Quebec"),
+        las = 1.5)
