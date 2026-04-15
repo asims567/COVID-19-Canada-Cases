@@ -20,9 +20,11 @@ The provided plot captures the multi-phase evolution of the COVID-19 Case Fatali
 <img width="513" height="318" alt="Rplot01" src="https://github.com/user-attachments/assets/92db30a9-f705-41f0-8930-503c46c90e3a" />
 
 
-The box plot shows a comparison of Ontario and Quebec weekly COVID-19 deaths and provides statistical insight. I want to identify similarities or major differences in the death count of the specific provinces of Ontario and Quebec, since there is a huge population difference in these provinces, and test them.  The following are statistical test results:
+The box plot shows a comparison of Ontario and Quebec weekly COVID-19 deaths and provides statistical insight. I want to identify similarities or major differences in the death count of the specific provinces of Ontario and Quebec, since there is a huge population difference in these provinces, and test them.  
 
 ## Welch Two Sample t-test
+
+The following table represents the analysis and results:
 **Comparison:** Weekly Deaths — Ontario vs Quebec (`numdeaths_last7`)
 
 | Statistic | Value |
