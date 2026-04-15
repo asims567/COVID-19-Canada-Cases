@@ -5,6 +5,14 @@ library(rstatix)
 
 df_raw <- read_csv("covid19-download.csv")
 
+Rows: 3630 Columns: 23                     , eta:  0s
+── Column specification ───────────────────
+Delimiter: ","
+chr  (10): prname, prnameFR, totalcases...
+dbl  (12): pruid, reporting_week, repor...
+date  (1): date
+
+
 df <- df_raw %>% 
   mutate(date = as.Date(date)) %>% 
   filter(prname != "Canada",
@@ -16,12 +24,43 @@ df_canada <- df_raw %>%
 
 
 class(df_canada$numdeaths)
-class(df_canada$totalcases)
-glimpse(df_canada)
+1] "numeric"
 
+class(df_canada$totalcases)
+[1] "character"
+
+glimpse(df_canada)
+Rows: 242
+Columns: 23
+$ pruid               <dbl> 1, 1, 1, 1, 1…
+$ prname              <chr> "Canada", "Ca…
+$ prnameFR            <chr> "Canada", "Ca…
+$ date                <date> 2020-02-08, …
+$ reporting_week      <dbl> 6, 7, 8, 9, 1…
+$ reporting_year      <dbl> 2020, 2020, 2…
+$ update              <dbl> NA, NA, NA, N…
+$ totalcases          <chr> "8", "8", "11…
+$ numtotal_last7      <chr> "4", "0", "3"…
+$ ratecases_total     <chr> "0.02", "0.02…
+$ numdeaths           <dbl> 0, 0, 0, 0, 0…
+$ numdeaths_last7     <dbl> 0, 0, 0, 0, 0…
+$ ratedeaths          <dbl> 0.00, 0.00, 0…
+$ ratecases_last7     <chr> "0.01", "0", …
+$ ratedeaths_last7    <dbl> 0.00, 0.00, 0…
+$ numtotal_last14     <chr> "5", "4", "3"…
+$ numdeaths_last14    <dbl> 0, 0, 0, 0, 0…
+$ ratetotal_last14    <chr> "0.01", "0.01…
+$ ratedeaths_last14   <dbl> 0.00, 0.00, 0…
+$ avgcases_last7      <chr> "0.57", "0", …
+$ avgincidence_last7  <chr> "0", "0", "0"…
+$ avgdeaths_last7     <dbl> 0.00, 0.00, 0…
+$ avgratedeaths_last7 <dbl> 0.00, 0.00, 0…
 
 str(df_cfr$totalcases)
+num [1:225] 8 8 11 25 63 ...
+
 str(df_cfr$numdeaths)
+num [1:225] 0 0 0 0 0 ..
 
 
 library(readr)
@@ -61,12 +100,32 @@ df_cfr <- df_cfr %>%
 t_result <- t.test(CFR ~ period, data = df_cfr)
 print(t_result)
 
+Welch Two-Sample t-test
+
+data:  CFR by period
+t = -8.9679, df = 72.422, p-value =
+2.284e-13
+Alternative hypothesis: true difference in means between group Post-Vaccine and group Pre-Vaccine is not equal to 0
+95 percent confidence interval:
+ -3.728463 -2.372439
+sample estimates:
+mean in group Post-Vaccine 
+                  1.226145 
+ mean in group Pre-Vaccine 
+                  4.276596 
 
 df_cfr %>%
   group_by(period) %>%
   summarise(mean_CFR = mean(CFR, na.rm = TRUE))
 
+period       mean_CFR
+  <chr>           <dbl>
+1 Post-Vaccine     1.23
+2 Pre-Vaccine      4.28
+
+
 cat("T-test p-value:", t_result$p.value, "\n")
+T-test p-value: 2.283581e-13 
 
 
 df_cfr <- df_cfr %>% 
@@ -76,6 +135,30 @@ df_cfr <- df_cfr %>%
 
 lm_model <- lm(CFR ~ week, data = df_cfr)
 summary(lm_model)
+
+Call:
+lm(formula = CFR ~ week, data = df_cfr)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.5073 -1.0459 -0.4295  0.6737  4.9869 
+
+Coefficients:
+             Estimate Std. Error t value
+(Intercept)  4.507255   0.231322   19.48
+week        -0.020459   0.001787  -11.45
+            Pr(>|t|)    
+(Intercept)   <2e-16 ***
+week          <2e-16 ***
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’
+  0.1 ‘ ’ 1
+
+Residual standard error: 1.741 on 223 degrees of freedom
+Multiple R-squared:  0.3703,	Adjusted R-squared:  0.3675 
+F-statistic: 131.1 on 1 and 223 DF,  p-value: < 2.2e-16
+
 
 library(ggplot2)
 ggplot(df_cfr, aes(x = week, y = CFR)) +
