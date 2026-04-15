@@ -25,7 +25,9 @@ The box plot shows a comparison of Ontario and Quebec weekly COVID-19 deaths and
 ## Welch Two Sample t-test
 
 The following table represents the analysis and results:
-**Comparison:** Weekly Deaths — Ontario vs Quebec (`numdeaths_last7`)
+
+
+**Comparison:** Weekly Deaths — Ontario vs Quebec
 
 | Statistic | Value |
 |-----------|-------|
